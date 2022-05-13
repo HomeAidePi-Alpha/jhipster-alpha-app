@@ -1,8 +1,5 @@
 name: Application CI - PreProd
-on:
-  pull_request:
-    types:
-      - closed
+on: [pull_request]
 
 jobs:
   if_merged:
