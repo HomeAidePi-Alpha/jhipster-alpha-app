@@ -1,4 +1,5 @@
-name: Application CI - PreProd
+name: PreProd
+
 on: [pull_request]
 
 jobs:
