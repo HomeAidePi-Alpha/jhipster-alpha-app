@@ -1,6 +1,9 @@
 name: PreProd
 
-on: [pull_request]
+on:
+  pull_request:
+    types:
+      - closed
 
 jobs:
   if_merged:
