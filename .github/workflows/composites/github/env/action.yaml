@@ -4,6 +4,9 @@ inputs:
   ENVIRONMENT:
     description: 'Environment Name'
     required: true
+  GITHUB_TOKEN: 
+    description: 'Github actions token'
+    required: true
   SNYK_TOKEN:
     description: 'Snyk Token'
     required: true
@@ -42,7 +45,7 @@ runs:
       shell: bash
       # We place the GITHUB_TOKEN in a temp file so its not handled long then deleted
       run: |
-        echo "${{ secrets.GITHUB_TOKEN}}" > .githubtoken
+        echo "${{ inputs.GITHUB_TOKEN}}" > .githubtoken
         gh auth login --with-token < .githubtoken
         rm .githubtoken
         gh api --method PUT -H "Accept: application/vnd.github.v3+json" /repos/${{ github.repository }}/environments/${{ inputs.ENVIRONMENT }}
