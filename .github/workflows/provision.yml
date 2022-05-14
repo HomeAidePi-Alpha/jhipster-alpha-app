@@ -48,7 +48,7 @@ jobs:
     - name: Check out Repo
       uses: actions/checkout@v3
       
-    - uses: ./.github/workflows/composites/github-env
+    - uses: ./.github/workflows/composites/github/env
       with:
           ENVIRONMENT:  ${{ github.event.inputs.environment }}
           SNYK_TOKEN: ${{ github.event.inputs.snyk_token }}

@@ -47,12 +47,12 @@ runs:
         rm .githubtoken
         gh api --method PUT -H "Accept: application/vnd.github.v3+json" /repos/${{ github.repository }}/environments/${{ inputs.ENVIRONMENT }}
     
-    # Sleep for magic seconds to give the former process time to complete (may be legacy if they queue durably)
-    - name: Sleep for 10 seconds
+    # Sleep for magic seconds to give the former process time to complete (may be legacy if they start to queue durably)
+    - name: Sleep for 30 seconds
       id: sleep
       shell: bash
       run: |
-        sleep 10s
+        sleep 30s
 
     # Here we will push secrets using gh cli 
     # Basically from any source we seek to use and will be abstracted away from the consumer of the repo in one degree of separation 
