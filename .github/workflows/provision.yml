@@ -12,8 +12,28 @@ on:
         description: 'A Snyk Token'
         required: true
         default: ''
+      sonar_url:
+        description: 'A Sonar Url'
+        required: true
+        default: 'https://sast-sq.ferguson.com/'
       sonar_token:
         description: 'A Sonar Token'
+        required: true
+        default: ''
+      cypress_record_key:
+        description: 'Cypress Record Key'
+        required: true
+        default: ''
+      cypress_project_id:
+        description: 'Cypress project id'
+        required: true
+        default: ''
+      docker_username:
+        description: Docker User Name'
+        required: true
+        default: ''
+      docker_password:
+        description: Docker Password'
         required: true
         default: ''
       teams_webhook:
@@ -53,7 +73,13 @@ jobs:
           ENVIRONMENT:  ${{ github.event.inputs.environment }}
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           SNYK_TOKEN: ${{ github.event.inputs.snyk_token }}
-
+          SONAR_URL: ${{ github.event.inputs.sonar_url }}
+          SONAR_TOKEN: ${{ github.event.inputs.sonar_token }}
+          CYPRESS_PROJECT_ID: ${{ github.event.inputs.cypress_project_id }}
+          CYPRESS_RECORD_KEY: ${{ github.event.inputs.cypress_record_key}}
+          DOCKER_USERNAME: ${{ github.event.inputs.docker_username}}
+          DOCKER_PASSWORD: ${{ github.event.inputs.docker_password}}
+    
   chat-ops:
     name: Notify
     needs: [provision-github-env]

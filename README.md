@@ -1,5 +1,7 @@
 # jhipsterSampleApplication
 
+[![Quality Gate Status](https://sast-sq.ferguson.com/api/project_badges/measure?project=ci-cq-cd-alpha&metric=alert_status)](https://sast-sq.ferguson.com/dashboard?id=ci-cq-cd-alpha)
+
 This application was generated using JHipster 7.8.1, you can find documentation and help at [https://www.jhipster.tech](https://www.jhipster.tech).
 
 ## Project Structure
