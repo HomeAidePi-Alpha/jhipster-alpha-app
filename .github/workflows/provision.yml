@@ -75,8 +75,6 @@ jobs:
           SNYK_TOKEN: ${{ github.event.inputs.snyk_token }}
           SONAR_URL: ${{ github.event.inputs.sonar_url }}
           SONAR_TOKEN: ${{ github.event.inputs.sonar_token }}
-          CYPRESS_PROJECT_ID: ${{ github.event.inputs.cypress_project_id }}
-          CYPRESS_RECORD_KEY: ${{ github.event.inputs.cypress_record_key}}
           DOCKER_USERNAME: ${{ github.event.inputs.docker_username}}
           DOCKER_PASSWORD: ${{ github.event.inputs.docker_password}}
     

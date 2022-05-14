@@ -16,12 +16,6 @@ inputs:
   SONAR_URL:
     description: 'Sonarqube Url'
     required: true
-  CYPRESS_PROJECT_ID:
-    description: 'Cypress Project Id'
-    required: true
-  CYPRESS_RECORD_KEY:
-    description: 'Cypress Record Key'
-    required: true
   DOCKER_USERNAME:
     description: 'Docker Username'
     required: true
@@ -69,10 +63,7 @@ runs:
         gh secret set ENVIRONMENT --body "${{  inputs.ENVIRONMENT }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         gh secret set SNYK_TOKEN --body "${{  inputs.SNYK_TOKEN }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         gh secret set SONAR_TOKEN --body "${{  inputs.SONAR_TOKEN }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
-        gh secret set SONAR_ORG --body "${{  inputs.SONAR_ORG }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         gh secret set SONAR_URL --body "${{  inputs.SONAR_URL }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
-        gh secret set CYPRESS_PROJECT_ID --body "${{  inputs.CYPRESS_PROJECT_ID }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
-        gh secret set CYPRESS_RECORD_KEY --body "${{  inputs.CYPRESS_RECORD_KEY }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         gh secret set DOCKER_USERNAME --body "${{  inputs.DOCKER_USERNAME }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         gh secret set DOCKER_PASSWORD --body "${{  inputs.DOCKER_PASSWORD }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         
