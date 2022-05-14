@@ -51,7 +51,7 @@ jobs:
     - uses: ./.github/workflows/composites/github/env
       with:
           ENVIRONMENT:  ${{ github.event.inputs.environment }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           SNYK_TOKEN: ${{ github.event.inputs.snyk_token }}
 
   chat-ops:
