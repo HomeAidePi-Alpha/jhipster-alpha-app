@@ -66,7 +66,7 @@ runs:
       shell: bash
       # We place the GITHUB_TOKEN in a temp file so its not handled long then deleted
       run: |
-        echo "${{ secrets.GITHUB_TOKEN}}" > .githubtoken
+        echo "${{ inputs.GITHUB_TOKEN}}" > .githubtoken
         gh auth login --with-token < .githubtoken
         rm .githubtoken
         gh secret set ENVIRONMENT --body "${{  inputs.ENVIRONMENT }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
