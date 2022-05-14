@@ -1,4 +1,4 @@
-name: Application CI - CQ - CD
+name: CI - CQ - CD
 on: [pull_request]
 jobs:
     lint:
