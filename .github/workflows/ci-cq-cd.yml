@@ -1,17 +1,8 @@
 name: CI - CQ - CD
 on: [pull_request]
 jobs:
-    lint:
-      name: linting checks
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v1
-      - name: CommitLint Config Conventional
-        run: npm install @commitlint/config-conventional
-      - uses: JulienKode/pull-request-name-linter-action@v0.5.0
-
     pipeline:
-      name: ci front, back and e2e tests
+      name: ci frontend, backend and e2e tests
       runs-on: ubuntu-latest
       if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
       timeout-minutes: 40
