@@ -20,14 +20,6 @@ on:
         description: 'A Sonar Token'
         required: true
         default: ''
-      cypress_record_key:
-        description: 'Cypress Record Key'
-        required: true
-        default: ''
-      cypress_project_id:
-        description: 'Cypress project id'
-        required: true
-        default: ''
       docker_username:
         description: Docker User Name'
         required: true
