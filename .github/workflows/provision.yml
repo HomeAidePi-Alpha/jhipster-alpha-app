@@ -82,11 +82,11 @@ jobs:
     - name: echo azure config
       shell: bash
       run: |
-        echo '${{ fromJson( github.event.inputs.azure_config_json) }}'
+        echo '${{ fromJson( github.event.inputs.azure_config_json).AZURE_APP_NAME }}'
     
       # Provision using composite
     - name: Provision Azure Spring Boot App with Azure Cli
-      uses: ./.github/workflows/clouds/azure/springCloud/springBoot/oidc/provision
+      uses: ./.github/workflows/composites/springCloud/springBoot/oidc/provision
       with:
         AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
         AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
