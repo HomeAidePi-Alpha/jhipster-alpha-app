@@ -22,6 +22,9 @@ inputs:
   DOCKER_PASSWORD:
     description: 'Docker Password'
     required: false
+  AZURE_CONFIG_JSON:
+    description: 'Azure Config as Json'
+    required: false
 
 runs:
     # composite type is key to chaining workflow modules accessed in repo or externally packaged or shared in an organization in github
@@ -66,4 +69,7 @@ runs:
         gh secret set SONAR_URL --body "${{  inputs.SONAR_URL }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         gh secret set DOCKER_USERNAME --body "${{  inputs.DOCKER_USERNAME }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         gh secret set DOCKER_PASSWORD --body "${{  inputs.DOCKER_PASSWORD }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
+        gh secret set AZURE_AD_CLIENT_ID --body "${{ fromJson( github.event.inputs.azure_config_json).AZURE_AD_CLIENT_ID }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
+        gh secret set AZURE_AD_TENANT_ID --body "${{ fromJson( github.event.inputs.azure_config_json).AZURE_AD_TENANT_ID }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
+        gh secret set AZURE_SUBSCRIPTION_ID --body "${{ fromJson( github.event.inputs.azure_config_json).AZURE_SUBSCRIPTION_ID }}" --env ${{  inputs.ENVIRONMENT }} --repos ${{ github.repository }}
         

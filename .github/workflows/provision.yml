@@ -44,6 +44,9 @@ on:
           "AZURE_SERVICE_INSTANCE_NAME": "alpha-sc-service",
           "AZURE_RESOURCE_GROUP_NAME": "HomeAidePi",
           "AZURE_APP_NAME": "dc-sc-alpha-app",
+          "AZURE_AD_CLIENT_ID": "",
+          "AZURE_AD_TENANT_ID": "",
+          "AZURE_AD_SUBSCRIPTION_ID": "",
         }'
 
 jobs:
@@ -78,19 +81,19 @@ jobs:
           SONAR_TOKEN: ${{ github.event.inputs.sonar_token }}
           DOCKER_USERNAME: ${{ github.event.inputs.docker_username}}
           DOCKER_PASSWORD: ${{ github.event.inputs.docker_password}}
-
-    - name: echo azure config
-      shell: bash
-      run: |
-        echo '${{ fromJson( github.event.inputs.azure_config_json).AZURE_APP_NAME }}'
+          AZURE_CONFIG_JSON: ${{ github.event.inputs.azure_config_json }}
+    # - name: echo azure config item
+    #   shell: bash
+    #   run: |
+    #     echo '${{ fromJson( github.event.inputs.azure_config_json).AZURE_APP_NAME }}'
     
       # Provision using composite
     - name: Provision Azure Spring Boot App with Azure Cli
       uses: ./.github/workflows/composites/springCloud/springBoot/oidc/provision
       with:
-        AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-        AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        AZURE_AD_CLIENT_ID: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_AD_CLIENT_ID }}
+        AZURE_AD_TENANT_ID: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_AD_TENANT_ID }}
+        AZURE_SUBSCRIPTION_ID: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_SUBSCRIPTION_ID }}
         AZURE_LOCATION: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_LOCATION }}
         AZURE_SERVICE_INSTANCE_NAME: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_SERVICE_INSTANCE_NAME }}
         AZURE_RESOURCE_GROUP_NAME: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_RESOURCE_GROUP_NAME }}
