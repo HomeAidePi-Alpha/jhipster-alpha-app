@@ -46,7 +46,7 @@ on:
           "AZURE_APP_NAME": "dc-sc-alpha-app",
           "AZURE_AD_CLIENT_ID": "",
           "AZURE_AD_TENANT_ID": "",
-          "AZURE_AD_SUBSCRIPTION_ID": "",
+          "AZURE_SUBSCRIPTION_ID": "",
         }'
 
 jobs:
