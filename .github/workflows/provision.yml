@@ -1,4 +1,4 @@
-name: Provision Github Environment
+name: Provision Github Secrets & Spring Cloud Environments
 
 # This will run when kicked off manually or by trigger
 on:
@@ -72,16 +72,16 @@ jobs:
     - name: Check out Repo
       uses: actions/checkout@v3
       
-    - uses: ./.github/workflows/composites/github/env
-      with:
-          ENVIRONMENT:  ${{ github.event.inputs.environment }}
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          SNYK_TOKEN: ${{ github.event.inputs.snyk_token }}
-          SONAR_URL: ${{ github.event.inputs.sonar_url }}
-          SONAR_TOKEN: ${{ github.event.inputs.sonar_token }}
-          DOCKER_USERNAME: ${{ github.event.inputs.docker_username}}
-          DOCKER_PASSWORD: ${{ github.event.inputs.docker_password}}
-          AZURE_CONFIG_JSON: ${{ github.event.inputs.azure_config_json }}
+    # - uses: ./.github/workflows/composites/github/env
+    #   with:
+    #       ENVIRONMENT:  ${{ github.event.inputs.environment }}
+    #       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+    #       SNYK_TOKEN: ${{ github.event.inputs.snyk_token }}
+    #       SONAR_URL: ${{ github.event.inputs.sonar_url }}
+    #       SONAR_TOKEN: ${{ github.event.inputs.sonar_token }}
+    #       DOCKER_USERNAME: ${{ github.event.inputs.docker_username}}
+    #       DOCKER_PASSWORD: ${{ github.event.inputs.docker_password}}
+    #       AZURE_CONFIG_JSON: ${{ github.event.inputs.azure_config_json }}
     # - name: echo azure config item
     #   shell: bash
     #   run: |
@@ -89,7 +89,7 @@ jobs:
     
       # Provision using composite
     - name: Provision Azure Spring Boot App with Azure Cli
-      uses: ./.github/workflows/composites/springCloud/springBoot/oidc/provision
+      uses: ./.github/workflows/composites/springCloud/oidc/provision
       with:
         AZURE_AD_CLIENT_ID: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_AD_CLIENT_ID }}
         AZURE_AD_TENANT_ID: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_AD_TENANT_ID }}
