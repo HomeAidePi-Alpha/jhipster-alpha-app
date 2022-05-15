@@ -36,6 +36,15 @@ on:
         description: 'Slack Webhook'
         required: false
         default: ''
+      azure_config_json:
+        description: 'Remaining Config as Json'
+        required: false
+        default: {
+          AZURE_LOCATION: 'centralus',
+          AZURE_SERVICE_INSTANCE_NAME: 'alpha-sc-service',
+          AZURE_RESOURCE_GROUP_NAME: 'HomeAidePi',
+          AZURE_APP_NAME: 'dc-sc-alpha-app',
+        }
 
 jobs:
   provision-github-env:
@@ -69,7 +78,22 @@ jobs:
           SONAR_TOKEN: ${{ github.event.inputs.sonar_token }}
           DOCKER_USERNAME: ${{ github.event.inputs.docker_username}}
           DOCKER_PASSWORD: ${{ github.event.inputs.docker_password}}
+
+    - run: |
+        echo '${{ fromJson( github.event.inputs.azure_config_json) }}'
     
+      # Provision using composite
+    - name: Provision Azure Spring Boot App with Azure Cli
+      uses: ./.github/workflows/clouds/azure/springCloud/springBoot/oidc/provision
+      with:
+        AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+        AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        AZURE_LOCATION: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_LOCATION }}
+        AZURE_SERVICE_INSTANCE_NAME: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_SERVICE_INSTANCE_NAME }}
+        AZURE_RESOURCE_GROUP_NAME: ${{ fromJson( github.event.inputs.azure_config_json).AZURE_RESOURCE_GROUP_NAME }}
+        AZURE_APP_NAME:  ${{ fromJson( github.event.inputs.azure_config_json).AZURE_APP_NAME }}
+
   chat-ops:
     name: Notify
     needs: [provision-github-env]

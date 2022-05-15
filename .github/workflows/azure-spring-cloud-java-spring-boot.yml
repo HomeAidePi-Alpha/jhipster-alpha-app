@@ -1,0 +1,107 @@
+name: Azure Spring Cloud Java Spring Boot
+
+on:
+  workflow_dispatch:
+    inputs: 
+      ENVIRONMENT:
+        description: 'Environment'
+        required: true
+        default: 'preprod'
+      AZURE_APP_NAME:
+        description: 'Name of the Spring Cloud App'
+        required: true
+        default: 'alpha-sc-app'
+      AZURE_SERVICE_INSTANCE_NAME:
+        description: 'Name of the Service Instance'
+        required: true
+        default: 'alpha-sc-service'
+      AZURE_RESOURCE_GROUP_NAME:
+        description: 'Azure Resource Group Name'
+        required: true
+        default: 'HomeAidePi'
+      AZURE_LOCATION:
+        description: 'Azure Region/Location'
+        required: true
+        default: 'centralus'
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
+env:
+  BUILD_PACKAGE_PATH: ./workloads/java/springBoot/petClinic
+  BUILD_PACKAGE_NAME: spring-petclinic-2.6.0-SNAPSHOT.jar
+
+jobs:
+  provision:
+    name: Provision Azure Spring Boot App
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.ENVIRONMENT }}
+
+    steps:  
+    # Checkout the Repo
+    - uses: actions/checkout@v3
+
+    # Provision using composite
+    - name: Provision Azure Spring Boot App with Azure Cli
+      uses: ./.github/workflows/clouds/azure/springCloud/springBoot/oidc/provision
+      with:
+        AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+        AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        AZURE_LOCATION: ${{ github.event.inputs.AZURE_LOCATION }}
+        AZURE_SERVICE_INSTANCE_NAME: ${{ github.event.inputs.AZURE_SERVICE_INSTANCE_NAME }}
+        AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.AZURE_RESOURCE_GROUP_NAME }}
+        AZURE_APP_NAME:  ${{ github.event.inputs.AZURE_APP_NAME }}
+
+  build:
+    name: Build source code
+    # needs: [provision]
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.ENVIRONMENT }}
+    steps:
+      # Check out the repo
+      - name: Checkout Github Action
+        uses: actions/checkout@v2
+
+      # Setup Java runtime
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+
+      # Maven Clean and Build
+      - name: maven clean & package build by env name and path
+        run: mvn clean package -Djar.finalName=${{ env.BUILD_PACKAGE_NAME }}
+        working-directory: ${{ env.BUILD_PACKAGE_PATH }}
+      
+      # Upload artifacts
+      - name: Upload maven package
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.inputs.AZURE_APP_NAME }}
+          path:  ${{ env.BUILD_PACKAGE_PATH }}/target
+
+  deploy:
+    name: Deploy source code
+    # needs: [provision, build]
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.ENVIRONMENT }}
+    steps:
+      # Checkout the Repo
+      - uses: actions/checkout@v3
+
+      # Deploy using composite
+      - name: Deploy Azure Spring Boot App with Azure Cli
+        uses: ./.github/workflows/clouds/azure/springCloud/springBoot/oidc/deploy
+        with:
+          AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+          AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_LOCATION: ${{ github.event.inputs.AZURE_LOCATION }}
+          AZURE_SERVICE_INSTANCE_NAME: ${{ github.event.inputs.AZURE_SERVICE_INSTANCE_NAME }}
+          AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.AZURE_RESOURCE_GROUP_NAME }}
+          AZURE_APP_NAME:  ${{ github.event.inputs.AZURE_APP_NAME }}
+          BUILD_PACKAGE_PATH:  ${{ env.BUILD_PACKAGE_PATH }}
+          BUILD_PACKAGE_NAME:  ${{ env.BUILD_PACKAGE_NAME }}
