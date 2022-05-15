@@ -39,12 +39,12 @@ on:
       azure_config_json:
         description: 'Remaining Config as Json'
         required: false
-        default: {
-          AZURE_LOCATION: 'centralus',
-          AZURE_SERVICE_INSTANCE_NAME: 'alpha-sc-service',
-          AZURE_RESOURCE_GROUP_NAME: 'HomeAidePi',
-          AZURE_APP_NAME: 'dc-sc-alpha-app',
-        }
+        default: '{
+          "AZURE_LOCATION": "centralus",
+          "AZURE_SERVICE_INSTANCE_NAME": "alpha-sc-service",
+          "AZURE_RESOURCE_GROUP_NAME": "HomeAidePi",
+          "AZURE_APP_NAME": "dc-sc-alpha-app",
+        }'
 
 jobs:
   provision-github-env:
@@ -79,7 +79,9 @@ jobs:
           DOCKER_USERNAME: ${{ github.event.inputs.docker_username}}
           DOCKER_PASSWORD: ${{ github.event.inputs.docker_password}}
 
-    - run: |
+    - name: echo azure config
+      shell: bash
+      run: |
         echo '${{ fromJson( github.event.inputs.azure_config_json) }}'
     
       # Provision using composite
