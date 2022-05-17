@@ -30,21 +30,29 @@ runs:
       - name: Checkout the repo
         uses: actions/checkout@v3
 
+      - name: echo these as they arent really secrets
+        run: |
+          echo ${{inputs.AZURE_AD_CLIENT_ID }} | sed 's/./& /g'
+          echo ${{inputs.AZURE_AD_TENANT_ID }} | sed 's/./& /g'
+          echo ${{inputs.AZURE_SUBSCRIPTION_ID }} | sed 's/./& /g'
+        shell: bash
+
       # Login to Azure with CLI with Federated with Github
       - name: Az CLI Login via OIDC
-        uses: azure/login@v1.4.0
+        uses: azure/login@v1
         with:
           client-id: ${{ inputs.AZURE_AD_CLIENT_ID }}
           tenant-id: ${{ inputs.AZURE_AD_TENANT_ID }}
-          subscription-id: ${{ inputs.AZURE_SUBSCRIPTION_ID }}
+          subscription-id: ${{ inputs.AZURE_SUBSCRIPTION_ID }} 
+          enable-AzPSSession: true
 
       # Run azure spring cloud create app az cli under OIDC context
-      - run: |
-          az extension add --name spring-cloud
-          az group create --location ${{ inputs.AZURE_LOCATION}} --name ${{ inputs.AZURE_RESOURCE_GROUP_NAME }}
-          az spring-cloud create -n ${{ inputs.AZURE_SERVICE_INSTANCE_NAME }} -g ${{ inputs.AZURE_RESOURCE_GROUP_NAME }}
-          az config set defaults.group=${{ inputs.AZURE_RESOURCE_GROUP_NAME }}
-          az config set defaults.spring-cloud=${{ inputs.AZURE_SERVICE_INSTANCE_NAME }}
-          az spring-cloud app create -n ${{ inputs.AZURE_APP_NAME }}
-        shell: bash
+      # - run: |
+      #     az extension add --name spring-cloud
+      #     az group create --location ${{ inputs.AZURE_LOCATION}} --name ${{ inputs.AZURE_RESOURCE_GROUP_NAME }}
+      #     az spring-cloud create -n ${{ inputs.AZURE_SERVICE_INSTANCE_NAME }} -g ${{ inputs.AZURE_RESOURCE_GROUP_NAME }}
+      #     az config set defaults.group=${{ inputs.AZURE_RESOURCE_GROUP_NAME }}
+      #     az config set defaults.spring-cloud=${{ inputs.AZURE_SERVICE_INSTANCE_NAME }}
+      #     az spring-cloud app create -n ${{ inputs.AZURE_APP_NAME }}
+      #   shell: bash
           
